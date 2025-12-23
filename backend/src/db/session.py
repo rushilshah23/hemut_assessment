@@ -21,3 +21,9 @@ AsyncSessionLocal = async_sessionmaker(
 async def get_async_session() :
     async with AsyncSessionLocal() as session:
         yield session
+
+
+async_session_factory = async_sessionmaker(
+    engine,
+    expire_on_commit=False,
+)

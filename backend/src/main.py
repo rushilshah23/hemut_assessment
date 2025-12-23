@@ -19,7 +19,14 @@ def create_app(config:Config):
     
     from src.apis.routers.users import router as users_router
     app.include_router(users_router)
+    from src.apis.routers.questions import router as questions_router
+    app.include_router(questions_router)
+    from src.apis.routers.answers import router as answers_router
+    app.include_router(answers_router)
 
+    from src.ws.router import router as ws_router
+    app.include_router(ws_router)
+    
     @app.get("/health")
     async def get_health():
         return {"message":"Healthy"}

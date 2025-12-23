@@ -102,6 +102,8 @@ class UserService:
                 payload={
                     "role": "ADMIN",
                     "email": admin_dto.email,
+                    "user_id":admin_dto.user_id,
+                    "id":admin_dto.id
                 }
             )
             return LoginAdminResponse(

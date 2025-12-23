@@ -55,3 +55,16 @@ class JWTUtils:
 
         except jwt.InvalidTokenError:
             raise InvalidTokenError("Invalid token")
+
+
+
+    @staticmethod
+    async def verify_optional_access_token(token: str) -> Dict[str, Any]:
+        decoded = jwt.decode(
+            token,
+            Config.JWT_SECRET_KEY,
+            algorithms=[Config.JWT_ALGORITHM],
+        )
+        print(f"DECoded in util: {decoded}")
+        return decoded
+

@@ -5,9 +5,10 @@ from src.db.base import Base
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from .timestampmixin import TimestampMixin
 
 
-class RoleORM(Base):
+class RoleORM(Base, TimestampMixin):
     __tablename__ = "roles"
 
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -18,7 +19,7 @@ class RoleORM(Base):
     )
     
     
-class UserORM(Base):
+class UserORM(Base, TimestampMixin):
     __tablename__ = "users"
 
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -30,7 +31,7 @@ class UserORM(Base):
 
     role = relationship("RoleORM")
 
-class AdminORM(Base):
+class AdminORM(Base, TimestampMixin):
     __tablename__ = "admins"
 
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -56,7 +57,7 @@ class AdminORM(Base):
     user = relationship("UserORM")
     
     
-class GuestORM(Base):
+class GuestORM(Base, TimestampMixin):
     __tablename__ = "guests"
 
     id: Mapped[str] = mapped_column(primary_key=True)
