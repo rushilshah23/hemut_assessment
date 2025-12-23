@@ -59,7 +59,7 @@ async def questions_ws(websocket: WebSocket):
                     #     "data": question.model_dump(mode="json"),
                     # })
                     questions = await service.get_all_questions()
-                    await websocket.send_json({
+                    await manager.broadcast({
                         "event": "QUESTION_UPDATED",
                         "data": [q.model_dump(mode="json") for q in questions],
                     })
@@ -83,7 +83,7 @@ async def questions_ws(websocket: WebSocket):
                     #     "data": answer.model_dump(mode="json"),
                     # })
                     questions = await service.get_all_questions()
-                    await websocket.send_json({
+                    await manager.broadcast({
                         "event": "QUESTION_UPDATED",
                         "data": [q.model_dump(mode="json") for q in questions],
                     })
@@ -105,7 +105,7 @@ async def questions_ws(websocket: WebSocket):
                     #     "data": question.model_dump(mode="json"),
                     # })
                     questions = await service.get_all_questions()
-                    await websocket.send_json({
+                    await manager.broadcast({
                         "event": "QUESTION_UPDATED",
                         "data": [q.model_dump(mode="json") for q in questions],
                     })
@@ -116,7 +116,7 @@ async def questions_ws(websocket: WebSocket):
                 elif event == "MARK_QUESTION_AS_ESCALATED":
                     # _ensure_admin(user)
                     if not is_admin(user):
-                        await websocket.send_json({
+                        await manager.broadcast({
                             "event": "ERROR",
                             "message": "Admin only action"
                         })
@@ -127,7 +127,7 @@ async def questions_ws(websocket: WebSocket):
                     #     "data": question.model_dump(),
                     # })
                     questions = await service.get_all_questions()
-                    await websocket.send_json({
+                    await manager.broadcast({
                         "event": "QUESTION_UPDATED",
                         "data": [q.model_dump(mode="json") for q in questions],
                     })
