@@ -21,7 +21,7 @@ from src.exceptions.auth import InvalidCredentialsError
 from src.helpers.schemas.users import LoginAdmin, LoginAdminResponse
 from src.helpers.mappers.admin import AdminMapper
 from src.utils.misc import MiscUtils
-
+from src.utils.jwt import JWTUtils
 
 
 class UserService:
@@ -97,12 +97,20 @@ class UserService:
 
             admin_dto = AdminMapper.to_dto(admin_orm)
 
+            access_token = JWTUtils.generate_access_token(
+                subject=admin_dto.user_id,
+                payload={
+                    "role": "ADMIN",
+                    "email": admin_dto.email,
+                }
+            )
             return LoginAdminResponse(
                 id=admin_dto.id,
                 user_id=admin_dto.user_id,
                 email=admin_dto.email,
-                access_token="SAMPLE_TOKEN"
+                access_token=access_token
             )
+ 
 
         except Exception:
             await self.session.rollback()

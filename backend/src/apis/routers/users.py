@@ -6,6 +6,7 @@ from src.services.users import UserService
 from src.helpers.enums.user import RoleEnum
 from src.helpers.schemas.users import CreateAdmin, LoginAdmin, LoginAdminResponse
 from src.helpers.schemas.api_response import APIResponse
+from src.apis.security import get_current_user
 
 router = APIRouter(
     prefix="/users",
@@ -51,10 +52,15 @@ async def admin_login(
 ):
     service = UserService(session)
 
-    admin = await service.login_admin(login_data)
+    login_admin_response = await service.login_admin(login_data)
 
     return APIResponse(
         status=status.HTTP_200_OK,
         message="Login successful",
-        data=admin.model_dump(),
+        data=login_admin_response.model_dump()
     ).to_dict()
+
+
+@router.get("/me")
+async def me(current_user=Depends(get_current_user)):
+    return current_user
