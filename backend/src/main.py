@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from src.config import Config
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.exceptions.base import AppException
 from src.apis.exception_handlers import (
@@ -11,6 +12,17 @@ from src.apis.exception_handlers import (
 
 def create_app(config:Config):
     app = FastAPI()
+    
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.add_exception_handler(AppException, app_exception_handler)
     app.add_exception_handler(Exception, unhandled_exception_handler)
     app.add_exception_handler(Exception, value_exception_handler)
