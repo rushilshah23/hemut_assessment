@@ -45,6 +45,7 @@ async def integrity_error_handler(
 
 
 
+
 async def unhandled_exception_handler(
     request: Request,
     exc: Exception,
@@ -54,6 +55,20 @@ async def unhandled_exception_handler(
         content=APIResponse(
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             message="Internal server error",
+            data=None,
+        ).to_dict(),
+    )
+
+
+async def value_exception_handler(
+    request: Request,
+    exc: ValueError,
+):
+    return JSONResponse(
+        status_code=status.HTTP_403_FORBIDDEN,
+        content=APIResponse(
+            status=status.HTTP_403_FORBIDDEN,
+            message=str(exc),
             data=None,
         ).to_dict(),
     )

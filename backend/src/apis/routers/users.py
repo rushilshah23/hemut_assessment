@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.db.session import get_async_session
 from src.services.users import UserService
 from src.helpers.enums.user import RoleEnum
-from src.helpers.schemas.users import CreateAdmin
+from src.helpers.schemas.users import CreateAdmin, LoginAdmin, LoginAdminResponse
 from src.helpers.schemas.api_response import APIResponse
 
 router = APIRouter(
@@ -14,7 +14,7 @@ router = APIRouter(
 
 from src.exceptions.database import DuplicateResourceError
 
-@router.post("/admin", status_code=status.HTTP_201_CREATED)
+@router.post("/admin/register", status_code=status.HTTP_201_CREATED)
 async def create_admin_user(
     create_admin_schema: CreateAdmin,
     session: AsyncSession = Depends(get_async_session),
@@ -41,3 +41,20 @@ async def create_admin_user(
     #         status_code=status.HTTP_400_BAD_REQUEST,
     #         detail=str(e),
     #     )
+    
+
+
+@router.post("/admin/login", status_code=status.HTTP_200_OK)
+async def admin_login(
+    login_data: LoginAdmin,
+    session: AsyncSession = Depends(get_async_session),
+):
+    service = UserService(session)
+
+    admin = await service.login_admin(login_data)
+
+    return APIResponse(
+        status=status.HTTP_200_OK,
+        message="Login successful",
+        data=admin.model_dump(),
+    ).to_dict()
